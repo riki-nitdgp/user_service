@@ -24,7 +24,7 @@ class UserManager:
         auth_token = await SecurityManager.create_authorization_token(user_id)
         hash_password = SecurityManager.get_password_hash(password)
         payload = {
-            "user_id": user_id,
+            "username": user_id,
             "email": email,
             "phone_number": phone_number,
             "authorization_token": auth_token,
@@ -32,19 +32,19 @@ class UserManager:
             "hash_key": hash_password
         }
         user = await User.create(**payload)
-        return {"username": user.username,  "email": user.email, "phone_number": user.phone_number}
+        return {"username": str(user.username), "email": user.email, "phone_number": user.phone_number}
 
     @classmethod
     async def login(cls, email: str, password: str):
         user = await cls.check_existing_user_using_email(email)
-        if not user["existing_user"]:
+        if not user["is_existing_user"]:
             raise NotFoundException(ApiError.USER_NOT_FOUND.value)
 
         user_data = user["user"]
         hash_key = user_data.hash_key
         username = user_data.username
         authorization_token = user_data.authorization_token
-        encrypted_auth_token = encrypt(Secret.ENCRYPTION_DECRYPTION_KEY, authorization_token)
+        # encrypted_auth_token = SecurityManager.encrypt_auth_token(authorization_token)
         if not SecurityManager.verify_password(password, hash_key):
             raise ForbiddenException(ApiError.INVALID_CREDENTIALS.value)
 
@@ -52,12 +52,13 @@ class UserManager:
         if not valid_authorization_token["is_authorized_user"]:
             new_authorization_token = await SecurityManager.create_authorization_token(username)
             await User.filter(**{"username": username}).update(**{"authorization_token": new_authorization_token})
-            encrypted_auth_token = encrypt(Secret.ENCRYPTION_DECRYPTION_KEY, authorization_token)
+            encrypted_auth_token = SecurityManager.encrypt_auth_token(Secret.ENCRYPTION_DECRYPTION_KEY,
+                                                                      authorization_token)
         return {
             "is_logged_in": True,
-            "authorization_token": encrypted_auth_token,
+            "authorization_token": authorization_token,
             "user_info": {
-                "username": username,
+                "username": str(username),
                 "email": user_data.email,
                 "phone_number": user_data.phone_number
             }
@@ -69,7 +70,7 @@ class UserManager:
         user = await User.filter(email=email)
         if user:
             result["user"] = user[0]
-            result["existing_user"] = True
+            result["is_existing_user"] = True
         return result
 
     @classmethod
@@ -78,10 +79,9 @@ class UserManager:
         user = await User.filter(phone_number=phone_number)
         if user:
             result["user"] = user[0]
-            result["existing_user"] = True
+            result["is_existing_user"] = True
         return result
 
     @classmethod
     def generate_user_id(cls):
         return str(uuid.uuid4())
-

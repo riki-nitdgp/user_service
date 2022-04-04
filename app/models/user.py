@@ -3,11 +3,11 @@ from tortoise import Model, fields
 
 class User(Model):
     id = fields.BigIntField(pk=True)
-    username = fields.UUIDField(max_length=100, index=True)
+    username = fields.UUIDField(max_length=100, index=True, unique=True)
     email = fields.CharField(max_length=100, index=True, unique=True)
     phone_number = fields.IntField(max_length=100, index=True, unique=True)
     is_super_user = fields.BooleanField(default=False)
-    authorization_token = fields.CharField(max_length=1000)
+    authorization_token = fields.CharField(max_length=1000, index=True)
     hash_key = fields.TextField()
     created_at = fields.BigIntField(null=False)
 

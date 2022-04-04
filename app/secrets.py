@@ -3,4 +3,4 @@ class Secret:
     AUTH_TOKEN_LIFE_TIME: int = 60 * 24 * 8
     AUTH_TOKEN_TYPE: str = "access_token"
     ALGORITHM: str = "HS256"
-    ENCRYPTION_DECRYPTION_KEY = "auth_token"
+    ENCRYPTION_DECRYPTION_KEY = b'Y2QMwnx3JC6xABPc0pbbmL8JgxtM3ljqMyCelTAnK98='

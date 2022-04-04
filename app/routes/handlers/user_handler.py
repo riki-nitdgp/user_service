@@ -21,7 +21,7 @@ async def user_signup(_request: Request):
     DataValidator.validate_password(password)
 
     result = await UserManager.sign_up(email, phone_number, password)
-    return HttpResponseBuilder.build_success_response(result)
+    return await HttpResponseBuilder.build_success_response(result)
 
 
 @routes.post("/login")
@@ -32,4 +32,4 @@ async def login(_request: Request):
     DataValidator.validate_email(email)
     DataValidator.validate_password(password)
     result = await UserManager.login(email, password)
-    return HttpResponseBuilder.build_success_response(result)
+    return await HttpResponseBuilder.build_success_response(result)
