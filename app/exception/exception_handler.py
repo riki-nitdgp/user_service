@@ -1,10 +1,8 @@
-from fastapi import HTTPException
-from starlette.requests import Request
-from starlette.responses import JSONResponse
+from fastapi import HTTPException, status, Request
+from fastapi.responses import JSONResponse
 from app.utils import HttpResponseBuilder
 from .exceptions import InternalServerError, BadRequestException, NotFoundException, UnAuthorizedException, \
     ForbiddenException
-from starlette import status
 import traceback
 
 

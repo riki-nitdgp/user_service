@@ -16,7 +16,8 @@ class HttpResponseBuilder:
     @classmethod
     async def build_error_response(cls, message, status_code=400):
         response = {
-            "error": [{"message": message}],
+            "errors": [message],
+            "message": message,
             "success": False,
             "status_code": status_code,
         }

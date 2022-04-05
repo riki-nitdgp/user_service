@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from starlette.exceptions import HTTPException
+from fastapi.exceptions import HTTPException
 from app.routes.api_routes import router as api_router
 from fastapi import Request
 from app.config import AppConfig

@@ -4,7 +4,6 @@ from tortoise.contrib.fastapi import HTTPNotFoundError, register_tortoise
 
 
 class InitializeDBManager:
-    db_config = AppConfig.config["DATABASE"]
 
     @classmethod
     def init_db(cls, app):
