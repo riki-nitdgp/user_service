@@ -10,6 +10,8 @@ COPY ./config.json /opt/user_service/config.json
 
 RUN pip3 install -r /opt/user_service/requirements.txt
 
+RUN opentelemetry-bootstrap --action=install
+
 COPY ./app /opt/user_service/app
 
 EXPOSE 8005
