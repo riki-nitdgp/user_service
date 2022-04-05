@@ -4,6 +4,7 @@ from app.routes.api_routes import router as api_router
 from fastapi import Request
 from app.config import AppConfig
 from app.initializer import InitializeDBManager
+from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 
 from app.utils import HttpResponseBuilder
 from app.exception import (
@@ -28,6 +29,8 @@ def create_application() -> FastAPI:
     application.include_router(api_router, prefix=config.get("API_PREFIX"))
     add_exception_handler(application)
     InitializeDBManager.init_db(application)
+    if config.get("ENABLE_OPEN_TELEMETRY"):
+        FastAPIInstrumentor().instrument();
     return application
 
 
