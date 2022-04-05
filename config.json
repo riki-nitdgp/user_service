@@ -3,6 +3,7 @@
 {
   "SERVICE_NAME": "user-service",
   "PORT": 8005,
+   "ENABLE_OPEN_TELEMETRY": true,
   "HOST": "0.0.0.0",
   "DEBUG": true,
   "API_PREFIX": "/api",

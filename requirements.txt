@@ -9,3 +9,4 @@ cryptography
 opentelemetry-distro
 opentelemetry-instrumentation
 opentelemetry-exporter-otlp
+opentelemetry-instrumentation-fastapi
